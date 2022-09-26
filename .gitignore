@@ -1,23 +1,22 @@
-# ignore everything in the root except the "wp-content" directory.
-!wp-content/
-
-# ignore everything in the "wp-content" directory, except:
-# "mu-plugins", "plugins", "themes" directory
-wp-content/*
-!wp-content/mu-plugins/
-!wp-content/plugins/
-!wp-content/themes/
-
-# ignore these plugins
-wp-content/plugins/hello.php
-
-# ignore specific themes
-wp-content/themes/twenty*/
-
-# ignore node dependency directories
-node_modules/
-
-# ignore log files and databases
-*.log
-*.sql
-*.sqlite
+function regenerateThumbnails()
+{
+    global $wpdb;
+    
+    $images = $wpdb->get_results("SELECT ID FROM $wpdb->posts WHERE post_type = 'attachment' AND post_mime_type LIKE 'image/%'");
+ 
+    foreach ($images as $image)
+    {
+        $id = $image->ID;
+        $fullsizepath = get_attached_file($id);
+ 
+        if (false === $fullsizepath || !file_exists($fullsizepath))
+            return;
+ 
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+ 
+        if (wp_update_attachment_metadata($id, wp_generate_attachment_metadata($id, $fullsizepath)))
+            return true;
+        else
+            return false;
+    }
+}
