@@ -1,4 +1,4 @@
-# Regenerate-thumbnails---no-extra-plugin-required.
+# Regenerate-thumbnails no-extra-plugin-required.
 WordPress Snippet
 
 About: Created new image sizes? Changed themes? This code snippet will force WordPress to regenerate thumbnails without the need for any 3rd party plugin.
